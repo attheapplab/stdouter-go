@@ -70,7 +70,7 @@ func log(id string, method string, resource string) {
 	fmt.Printf("[%s] %s {%s}\n", coloredMethod, resource, id)
 }
 
-func (l *logger) Do(ctx context.Context) context.Context {
+func (l *logger) Do(ctx context.Context, w http.ResponseWriter) context.Context {
 	id := readId(ctx)
 	method := readMethod(ctx)
 	resource := readResource(ctx)
