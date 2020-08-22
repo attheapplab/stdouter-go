@@ -1,4 +1,4 @@
-package loggor
+package logger
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	kid = "id"
+	klocator = "locator"
 	kmethod = "method"
 	kresource = "resource"
 )
@@ -26,16 +26,16 @@ const (
 
 type logger struct {}
 
-func NewLogger() *logger {
+func New() *logger {
 	return &logger{}
 }
 
-func readId(ctx context.Context) string {
-	id, ok := ctx.Value(kid).(string)
+func readLocator(ctx context.Context) string {
+	locator, ok := ctx.Value(klocator).(string)
 	if !ok {
 		return ""
 	}
-	return id
+	return locator
 }
 
 func readMethod(ctx context.Context) string {
@@ -54,7 +54,7 @@ func readResource(ctx context.Context) string {
 	return resource
 }
 
-func log(id string, method string, resource string) {
+func colorMethod(method string) string {
 	var color string
 	switch method {
 	case http.MethodDelete:
@@ -66,14 +66,29 @@ func log(id string, method string, resource string) {
 	default:
 		color = kwhite
 	}
-	coloredMethod := fmt.Sprintf("%s%s%s", color, method, kreset)
-	fmt.Printf("[%s] %s {%s}\n", coloredMethod, resource, id)
+	return fmt.Sprintf("%s%s%s", color, method, kreset)
+}
+
+func formatPath(locator string, resource string) string {
+	var path string
+	if locator == "" {
+		path = resource
+	} else {
+		path = resource + "/" + locator
+	}
+	return path
+}
+
+func log(locator string, method string, resource string) {
+	coloredMethod := colorMethod(method)
+	formattedPath := formatPath(locator, resource)
+	fmt.Printf("[%s] %s\n", coloredMethod, formattedPath)
 }
 
 func (l *logger) Do(ctx context.Context, w http.ResponseWriter) context.Context {
-	id := readId(ctx)
+	locator := readLocator(ctx)
 	method := readMethod(ctx)
 	resource := readResource(ctx)
-	log(id, method, resource)
+	log(locator, method, resource)
 	return ctx
 }
