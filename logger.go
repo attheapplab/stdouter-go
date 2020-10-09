@@ -40,6 +40,8 @@ func colorMethod(method string) string {
 		color = kred
 	case http.MethodGet:
 		color = kgreen
+	case http.MethodPatch:
+		color = kblue
 	case http.MethodPost:
 		color = kyellow
 	default:
