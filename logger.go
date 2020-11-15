@@ -9,7 +9,7 @@ import (
 
 const (
 	kbody = "body"
-	klocator = "locator"
+	kidentifier = "identifier"
 	kmethod = "method"
 	kquery = "query"
 	kresource = "resource"
@@ -64,12 +64,12 @@ func formatInputs(body map[string]string, query map[string]string) string {
 	return formattedInputs
 }
 
-func formatPath(locator string, resource string) string {
+func formatPath(identifier string, resource string) string {
 	var path string
-	if locator == "" {
+	if identifier == "" {
 		path = resource
 	} else {
-		path = resource + "/" + locator
+		path = resource + "/" + identifier
 	}
 	return path
 }
@@ -84,12 +84,12 @@ func readBody(ctx context.Context) map[string]string {
 	return bodyParams
 }
 
-func readLocator(ctx context.Context) string {
-	locator, ok := ctx.Value(klocator).(string)
+func readIdentifier(ctx context.Context) string {
+	identifier, ok := ctx.Value(kidentifier).(string)
 	if !ok {
 		return ""
 	}
-	return locator
+	return identifier
 }
 
 func readMethod(ctx context.Context) string {
@@ -118,19 +118,19 @@ func readResource(ctx context.Context) string {
 	return resource
 }
 
-func log(body map[string]string, locator string, method string, query map[string]string, resource string) {
+func log(body map[string]string, identifier string, method string, query map[string]string, resource string) {
 	coloredMethod := colorMethod(method)
 	formattedInputs := formatInputs(body, query)
-	formattedPath := formatPath(locator, resource)
+	formattedPath := formatPath(identifier, resource)
 	fmt.Printf("[%s] %s %s\n", coloredMethod, formattedPath, formattedInputs)
 }
 
 func (l *logger) Do(ctx context.Context, w http.ResponseWriter) context.Context {
 	body := readBody(ctx)
-	locator := readLocator(ctx)
+	identifier := readIdentifier(ctx)
 	method := readMethod(ctx)
 	query := readQuery(ctx)
 	resource := readResource(ctx)
-	log(body, locator, method, query, resource)
+	log(body, identifier, method, query, resource)
 	return ctx
 }
