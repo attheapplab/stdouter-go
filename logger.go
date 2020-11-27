@@ -51,8 +51,8 @@ func colorMethod(method string) string {
 	return coloredMethod
 }
 
-func formatInputs(body map[string]string, query map[string]string) string {
-	var inputs = make(map[string]string)
+func formatInputs(body map[string]interface{}, query map[string]interface{}) string {
+	var inputs = make(map[string]interface{})
 	for k, v := range body {
 		inputs[k] = v
 	}
@@ -74,9 +74,9 @@ func formatPath(identifier string, resource string) string {
 	return path
 }
 
-func readBody(ctx context.Context) map[string]string {
-	var bodyParams = make(map[string]string)
-	if body, ok := ctx.Value(kbody).(map[string]string); ok {
+func readBody(ctx context.Context) map[string]interface{} {
+	var bodyParams = make(map[string]interface{})
+	if body, ok := ctx.Value(kbody).(map[string]interface{}); ok {
 		for k, v := range body {
 			bodyParams[k] = v
 		}
@@ -100,9 +100,9 @@ func readMethod(ctx context.Context) string {
 	return method
 }
 
-func readQuery(ctx context.Context) map[string]string {
-	var queryParams = make(map[string]string)
-	if query, ok := ctx.Value(kquery).(map[string]string); ok {
+func readQuery(ctx context.Context) map[string]interface{} {
+	var queryParams = make(map[string]interface{})
+	if query, ok := ctx.Value(kquery).(map[string]interface{}); ok {
 		for k, v := range query {
 			queryParams[k] = v
 		}
@@ -118,7 +118,7 @@ func readResource(ctx context.Context) string {
 	return resource
 }
 
-func log(body map[string]string, identifier string, method string, query map[string]string, resource string) {
+func log(body map[string]interface{}, identifier string, method string, query map[string]interface{}, resource string) {
 	coloredMethod := colorMethod(method)
 	formattedInputs := formatInputs(body, query)
 	formattedPath := formatPath(identifier, resource)
