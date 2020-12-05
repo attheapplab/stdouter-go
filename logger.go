@@ -8,11 +8,11 @@ import (
 )
 
 const (
-	kbody = "body"
+	kbody       = "body"
 	kidentifier = "identifier"
-	kmethod = "method"
-	kquery = "query"
-	kresource = "resource"
+	kmethod     = "method"
+	kquery      = "query"
+	kresource   = "resource"
 )
 
 const (
@@ -27,10 +27,12 @@ const (
 	kwhite  = "\033[97m"
 )
 
-type logger struct {}
+type Logger struct {
+	isSilentLog bool
+}
 
-func New() *logger {
-	return &logger{}
+func New() *Logger {
+	return &Logger{}
 }
 
 func colorMethod(method string) string {
@@ -125,7 +127,10 @@ func log(body map[string]interface{}, identifier string, method string, query ma
 	fmt.Printf("[%s] %s %s\n", coloredMethod, formattedPath, formattedInputs)
 }
 
-func (l *logger) Do(ctx context.Context, w http.ResponseWriter) context.Context {
+func (l *Logger) Do(ctx context.Context, w http.ResponseWriter) context.Context {
+	if l.isSilentLog {
+		return ctx
+	}
 	body := readBody(ctx)
 	identifier := readIdentifier(ctx)
 	method := readMethod(ctx)
@@ -133,4 +138,8 @@ func (l *logger) Do(ctx context.Context, w http.ResponseWriter) context.Context 
 	resource := readResource(ctx)
 	log(body, identifier, method, query, resource)
 	return ctx
+}
+
+func (l *Logger) SetIsSilentLog(isSilentLog bool) {
+	l.isSilentLog = isSilentLog
 }
