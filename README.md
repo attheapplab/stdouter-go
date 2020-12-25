@@ -6,13 +6,12 @@ It may be used in conjuction with [Connector](https://github.com/attheapplab/con
 
 ## Example
 
-```go
+```golang
 package main
 
 import (
 	"github.com/attheapplab/connector-go"
 	"github.com/attheapplab/logger-go"
-	"net/http"
 )
 
 func main() {
