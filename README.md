@@ -2,7 +2,7 @@
 
 Logger is an opinionated middleware for logging incoming HTTP requests.
 
-It is expected to be used in conjuction with [Connector](https://github.com/attheapplab/connector-go).
+It may be used in conjuction with [Connector](https://github.com/attheapplab/connector-go).
 
 ## Example
 
@@ -21,16 +21,13 @@ func main() {
 
 	// Create your logger middleware instance and place it on any route.
 	logger := logger.New()
-	handler.Handle(http.MethodGet, "home", logger)
+	handler.Get("home", logger)
 	
 	// Start the server.
 	handler.ListenAndServe()
 }
 
 ```
-
-## Contributing
-For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
