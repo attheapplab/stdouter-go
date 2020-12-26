@@ -27,12 +27,12 @@ const (
 	kwhite  = "\033[97m"
 )
 
-type Logger struct {
+type Printer struct {
 	isSilentLog bool
 }
 
-func New() *Logger {
-	return &Logger{}
+func New() *Printer {
+	return &Printer{}
 }
 
 func colorMethod(method string) string {
@@ -127,8 +127,8 @@ func log(body map[string]interface{}, identifier string, method string, query ma
 	fmt.Printf("[%s] %s %s\n", coloredMethod, formattedPath, formattedInputs)
 }
 
-func (l *Logger) Do(ctx context.Context, w http.ResponseWriter) context.Context {
-	if l.isSilentLog {
+func (p *Printer) Do(ctx context.Context, w http.ResponseWriter) context.Context {
+	if p.isSilentLog {
 		return ctx
 	}
 	body := readBody(ctx)
@@ -140,6 +140,6 @@ func (l *Logger) Do(ctx context.Context, w http.ResponseWriter) context.Context 
 	return ctx
 }
 
-func (l *Logger) SetIsSilentLog(isSilentLog bool) {
-	l.isSilentLog = isSilentLog
+func (p *Printer) SetIsSilentLog(isSilentLog bool) {
+	p.isSilentLog = isSilentLog
 }
