@@ -1,3 +1,3 @@
-module github.com/attheapplab/logger-go
+module github.com/attheapplab/stdouter-go
 
 go 1.15
